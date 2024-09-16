@@ -140,11 +140,11 @@ class ContactEnemy(pygame.sprite.Sprite):
                     self.rect.move_ip(knockback, 0)
                 elif player.rect.left > self.rect.right:
                     self.rect.move_ip(-knockback, 0)
-                if self.rect.right > rightbound or self.rect.left < leftbound:
-                    if self.rect.right > rightbound:
-                        self.rect.right = rightbound
-                    elif self.rect.left < leftbound:
-                        self.rect.left = leftbound
+                if self.rect.right > rightbound:
+                    self.rect.right = rightbound
+                    speedx = 0
+                elif self.rect.left < leftbound:
+                    self.rect.left = leftbound
                     speedx = 0
             else:
                 if player.rect.centerx < self.rect.left:
@@ -154,9 +154,9 @@ class ContactEnemy(pygame.sprite.Sprite):
                 else:
                     speedx = 0
                 self.rect.move_ip(speedx, 0)
-                if self.rect.right > rightbound or self.rect.left < leftbound:
-                    if self.rect.right > rightbound:
-                        self.rect.right = rightbound
-                    elif self.rect.left < leftbound:
-                        self.rect.left = leftbound
+                if self.rect.right > rightbound:
+                    self.rect.right = rightbound
+                    speedx = 0
+                elif self.rect.left < leftbound:
+                    self.rect.left = leftbound
                     speedx = 0
