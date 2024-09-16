@@ -5,6 +5,7 @@
 import pygame
 from pygame.locals import *
 import updates
+from time import sleep
 
 # Initializing pygame and screen
 pygame.init()
@@ -42,7 +43,7 @@ while running:
         for i in level1enemies:
             enemies.add(i)
         advance = False
-    if level == 2 and advance == True:
+    elif level == 2 and advance == True:
         from levels.level2 import *
         for i in level2sprites:
             all_sprites.add(i)
@@ -91,11 +92,10 @@ while running:
 
     if player in playerjar and player.iframes > 0:
         player.iframes -= 1
-        if player.iframes < 20:
-            player.beenhit = False
         if player.iframes == 0:
             playerjar.empty()
-            player.iframes = 30
+            player.iframes = 15 
+            player.beenhit = False
     if player.health == 0:
         player.kill()
         weapon.kill()
@@ -114,10 +114,15 @@ while running:
         player.facing = 0
     elif pressed_keys[K_d] and not pressed_keys[K_a]:
         player.facing = 1
+    
     if player.facing == 1:
+        weapon.surf = weapon.original
         weapon.rect.left = player.rect.right
     elif player.facing == 0:
+        if weapon.surf == weapon.original:
+            weapon.surf = pygame.transform.flip(weapon.surf, True, False)
         weapon.rect.right = player.rect.left
+    
     if pressed_keys[K_k]:
         if weapon.sheathed and not weapon.attacking:
             weapons.add(weapon)
@@ -136,6 +141,7 @@ while running:
             i.beenhit = False
         thejar.empty()
 
+    # Display!
     screen.fill((30, 30, 30))
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
@@ -145,6 +151,16 @@ while running:
     for hp in visualhp:
         screen.blit(hp.surf, hp.rect)
     pygame.display.flip()
+
+    # Level advancement conditions
+    if level == 1:
+        if pygame.sprite.collide_rect(player, door):
+            level = 2
+            advance = True
+            all_sprites.empty()
+            environ.empty()
+            enemies.empty()
+    
     clock.tick(60)
 
 pygame.quit()
