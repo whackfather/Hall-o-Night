@@ -1,14 +1,42 @@
+# Player position updates
+
 import pygame
 from pygame.locals import *
 
 width, height = 1280, 720
 
 def playerupdate(pressed_keys, weapon, player, environ, beenhit, attacker):
+    def objectcollide():
+        if pygame.sprite.spritecollideany(player, environ):
+            obstacle = pygame.sprite.spritecollideany(player, environ)
+            if player.rect.top < obstacle.rect.bottom and player.rect.bottom > obstacle.rect.bottom:
+                player.rect.top = obstacle.rect.bottom
+                player.speedy = 0
+            elif player.rect.bottom > obstacle.rect.top and player.rect.top < obstacle.rect.bottom:
+                player.rect.bottom = obstacle.rect.top
+                player.speedy = 0
+                player.grounded = True
+        if player.rect.top < 0:
+            player.rect.top = 0
+            player.speedy = 0
+        if player.rect.bottom > height:
+            player.rect.bottom = height
+            player.speedy = 0
+            player.grounded = True
+        if player.rect.right > width:
+            player.rect.right = width
+        if player.rect.left < 0:
+            player.rect.left = 0
+    
     if beenhit:
+        player.speedy += 1
+        if player.speedy > 21:
+            player.speedy = 21
         if player.rect.right < attacker.rect.centerx:
-            player.rect.move_ip(-6, 0)
+            player.rect.move_ip(-6, player.speedy)
         elif player.rect.left > attacker.rect.centerx:
-            player.rect.move_ip(6, 0)
+            player.rect.move_ip(6, player.speedy)
+        objectcollide()
     else:
         if pressed_keys[K_a]:
             if player.jump:
@@ -39,23 +67,4 @@ def playerupdate(pressed_keys, weapon, player, environ, beenhit, attacker):
         player.speedy += 1
         if player.speedy > 21:
             player.speedy = 21
-        if pygame.sprite.spritecollideany(player, environ):
-            obstacle = pygame.sprite.spritecollideany(player, environ)
-            if player.rect.top < obstacle.rect.bottom and player.rect.bottom > obstacle.rect.bottom:
-                player.rect.top = obstacle.rect.bottom
-                player.speedy = 0
-            elif player.rect.bottom > obstacle.rect.top and player.rect.top < obstacle.rect.bottom:
-                player.rect.bottom = obstacle.rect.top
-                player.speedy = 0
-                player.grounded = True
-        if player.rect.top < 0:
-            player.rect.top = 0
-            player.speedy = 0
-        if player.rect.bottom > height:
-            player.rect.bottom = height
-            player.speedy = 0
-            player.grounded = True
-        if player.rect.right > width:
-            player.rect.right = width
-        if player.rect.left < 0:
-            player.rect.left = 0
+        objectcollide()
