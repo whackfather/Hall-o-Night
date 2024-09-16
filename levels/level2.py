@@ -1,3 +1,5 @@
+# Level 2 Information
+
 import pygame
 from pygame.locals import *
 from classes import *
