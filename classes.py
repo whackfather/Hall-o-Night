@@ -1,3 +1,5 @@
+# All game classes
+
 import pygame
 from pygame.locals import *
 
@@ -12,22 +14,32 @@ class Player(pygame.sprite.Sprite):
         self.speedx = 0
         self.speedy = 0
         self.health = 5
-        self.iframes = 30
+        self.iframes = 15
         self.beenhit = False
         self.facing = 1
 
+# HP sprites
 class HealthPoints(pygame.sprite.Sprite):
     def __init__(self):
         super(HealthPoints, self).__init__()
         self.surf = pygame.image.load("sprites/healthpoint.png").convert()
         self.rect = self.surf.get_rect()
 
+class AdvanceBox(pygame.sprite.Sprite):
+    def __init__(self):
+        super(AdvanceBox, self).__init__()
+        self.surf = pygame.image.load("sprites/advance.png").convert()
+        self.rect = self.surf.get_rect()
+        self.collide = self.surf.get_rect()
+        self.collide.width = 10
+
 # Player Weapon
 class Weapon(pygame.sprite.Sprite):
     def __init__(self):
         super(Weapon, self).__init__()
-        self.surf = pygame.image.load("sprites/weapon.png").convert()
+        self.surf = pygame.image.load("sprites/weaponright.png").convert()
         self.surf.set_colorkey((0, 0, 0))
+        self.original = self.surf
         self.rect = self.surf.get_rect()
         self.sheathed = True
         self.hitframes = 0
@@ -55,7 +67,7 @@ class ContactEnemy(pygame.sprite.Sprite):
         self.boundright = None
 
     def update(self, player, obst, beenhit, leftbound, rightbound):
-        if pygame.sprite.collide_circle_ratio(4)(player, self):
+        if pygame.sprite.collide_circle_ratio(3)(player, self):
             if player.rect.bottom > self.rect.bottom:
                 pass
             elif beenhit:
@@ -64,11 +76,11 @@ class ContactEnemy(pygame.sprite.Sprite):
                     self.rect.move_ip(knockback, 0)
                 elif player.rect.left > self.rect.right:
                     self.rect.move_ip(-knockback, 0)
-                if self.rect.right > obst.rect.right or self.rect.left < obst.rect.left:
-                    if self.rect.right > obst.rect.right:
-                        self.rect.right = obst.rect.right
-                    elif self.rect.left < obst.rect.left:
-                        self.rect.left = obst.rect.left
+                if self.rect.right > rightbound or self.rect.left < leftbound:
+                    if self.rect.right > rightbound:
+                        self.rect.right = rightbound
+                    elif self.rect.left < leftbound:
+                        self.rect.left = leftbound
                     speedx = 0
             else:
                 if player.rect.centerx < self.rect.left:
