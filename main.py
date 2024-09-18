@@ -4,7 +4,6 @@
 # Importing
 import pygame
 from pygame.locals import *
-import updates
 from time import sleep
 
 # Initializing pygame and screen
@@ -27,29 +26,18 @@ clock = pygame.time.Clock()
 # Stuff that needed defining 
 level = 1
 advance = True
-attackdone = True
 attacker = None
-nmespdx = 0
 
 running = True
 while running:
     # Level check
     if level == 1 and advance == True:
-        from levels.level1 import *
-        for i in level1sprites:
+        from levelinterpret import *
+        for i in levelsprites:
             all_sprites.add(i)
-        for i in level1environ:
+        for i in levelenviron:
             environ.add(i)
-        for i in level1enemies:
-            enemies.add(i)
-        advance = False
-    elif level == 2 and advance == True:
-        from levels.level2 import *
-        for i in level2sprites:
-            all_sprites.add(i)
-        for i in level2environ:
-            environ.add(i)
-        for i in level2enemies:
+        for i in levelenemies:
             enemies.add(i)
         advance = False
     
@@ -68,7 +56,7 @@ while running:
     
     # Enemy location update
     if level == 1:
-        for enemy in level1enemies:
+        for enemy in levelenemies:
             enemy.update(player, enemy.home, enemy.beenhit, enemy.boundleft, enemy.boundright)
     elif level == 2:
         pass
@@ -105,7 +93,7 @@ while running:
     pressed_keys = pygame.key.get_pressed()
     
     # Character location update
-    updates.playerupdate(pressed_keys, weapon, player, environ, player.beenhit, attacker)
+    player.update(pressed_keys, environ, player.beenhit, attacker, width, height)
 
     # Attack handling
     if pressed_keys[K_a] and pressed_keys[K_d]:
@@ -141,7 +129,7 @@ while running:
             i.beenhit = False
         thejar.empty()
 
-    # Display!
+    # Display sprites on screen
     screen.fill((30, 30, 30))
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
@@ -154,7 +142,7 @@ while running:
 
     # Level advancement conditions
     if level == 1:
-        if pygame.sprite.collide_rect(player, door):
+        if pygame.sprite.collide_rect(player, door) and str(enemies) == "<Group(0 sprites)>":
             level = 2
             advance = True
             all_sprites.empty()
