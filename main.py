@@ -25,31 +25,27 @@ playerjar = pygame.sprite.Group()
 clock = pygame.time.Clock()
 
 # Stuff that needed defining 
+attacker = None
 lvlnum = 1
 level = Level()
+def loader(lvlnum, all_sprites, environ, enemies):
+    level.load(lvlnum)
+    for i in level.sprites:
+        all_sprites.add(i)
+    for i in level.environ:
+        environ.add(i)
+    for i in level.enemies:
+        enemies.add(i)
 advance = True
-attacker = None
 
 running = True
 while running:
     # Level check
     if lvlnum == 1 and advance == True:
-        level.load(lvlnum)
-        for i in level.sprites:
-            all_sprites.add(i)
-        for i in level.environ:
-            environ.add(i)
-        for i in level.enemies:
-            enemies.add(i)
+        loader(lvlnum, all_sprites, environ, enemies)
         advance = False
     elif lvlnum == 2 and advance == True:
-        level.load(lvlnum)
-        for i in level.sprites:
-            all_sprites.add(i)
-        for i in level.environ:
-            environ.add(i)
-        for i in level.enemies:
-            enemies.add(i)
+        loader(lvlnum, all_sprites, environ, enemies)
         advance = False
     
     # Event handling
