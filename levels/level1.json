@@ -1,0 +1,26 @@
+{
+    "health":5,
+    "platforms":[
+        {"centerx":640, "centery":630},
+        {"centerx":546, "centery":630},
+        {"centerx":734, "centery":630},
+        {"centerx":47, "centery":495},
+        {"centerx":141, "centery":495},
+        {"centerx":235, "centery":495},
+        {"centerx":329, "centery":495},
+        {"centerx":458, "centery":360},
+        {"centerx":552, "centery":360},
+        {"centerx":646, "centery":360},
+        {"centerx":1044, "centery":287},
+        {"centerx":1138, "centery":287},
+        {"centerx":845, "centery":324}
+    ],
+    "door":{"centerx":1091, "centery":243},
+    "enemies":[
+        {"centerx":640, "centery":586, "leftbound":499, "rightbound":781},
+        {"centerx":47, "centery":451, "leftbound":0, "rightbound":376},
+        {"centerx":646, "centery":316, "leftbound":411, "rightbound":693}
+    ],
+    "player":{"centerx":80, "centery":688},
+    "weapon":{"centerx":128, "centery":688}
+}
