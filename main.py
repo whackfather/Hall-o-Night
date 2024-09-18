@@ -4,6 +4,7 @@
 # Importing
 import pygame
 from pygame.locals import *
+from classes import *
 from time import sleep
 
 # Initializing pygame and screen
@@ -24,20 +25,30 @@ playerjar = pygame.sprite.Group()
 clock = pygame.time.Clock()
 
 # Stuff that needed defining 
-level = 1
+lvlnum = 1
+level = Level()
 advance = True
 attacker = None
 
 running = True
 while running:
     # Level check
-    if level == 1 and advance == True:
-        from levelinterpret import *
-        for i in levelsprites:
+    if lvlnum == 1 and advance == True:
+        level.load(lvlnum)
+        for i in level.sprites:
             all_sprites.add(i)
-        for i in levelenviron:
+        for i in level.environ:
             environ.add(i)
-        for i in levelenemies:
+        for i in level.enemies:
+            enemies.add(i)
+        advance = False
+    elif lvlnum == 2 and advance == True:
+        level.load(lvlnum)
+        for i in level.sprites:
+            all_sprites.add(i)
+        for i in level.environ:
+            environ.add(i)
+        for i in level.enemies:
             enemies.add(i)
         advance = False
     
@@ -50,81 +61,82 @@ while running:
                 running = False
         if event.type == KEYUP:
             if event.key == K_SPACE:
-                player.jump = False
+                level.player.jump = False
             if event.key == K_k:
-                weapon.sheathed = True
+                level.weapon.sheathed = True
     
     # Enemy location update
-    if level == 1:
-        for enemy in levelenemies:
-            enemy.update(player, enemy.home, enemy.beenhit, enemy.boundleft, enemy.boundright)
-    elif level == 2:
-        pass
+    if lvlnum == 1:
+        for enemy in level.enemies:
+            enemy.update(level.player, enemy.beenhit, enemy.boundleft, enemy.boundright)
+    elif lvlnum == 2:
+        for enemy in level.enemies:
+            enemy.update(level.player, enemy.beenhit, enemy.boundleft, enemy.boundright)
     
     # Player, weapon, and enemy collision
     if pygame.sprite.groupcollide(weapons, enemies, False, False):
-        hitenemy = pygame.sprite.spritecollideany(weapon, enemies)
+        hitenemy = pygame.sprite.spritecollideany(level.weapon, enemies)
         if hitenemy not in thejar:
             hitenemy.health -= 1
             hitenemy.beenhit = True
             thejar.add(hitenemy)
         if hitenemy.health == 0:
             hitenemy.kill()
-    if pygame.sprite.spritecollideany(player, enemies):
-        attacker = pygame.sprite.spritecollideany(player, enemies)
-        if player not in playerjar:
-            player.health -= 1
-            levelhealth.remove(levelhealth[-1])
-            player.beenhit = True
-            playerjar.add(player)
+    if pygame.sprite.spritecollideany(level.player, enemies):
+        attacker = pygame.sprite.spritecollideany(level.player, enemies)
+        if level.player not in playerjar:
+            level.player.health -= 1
+            level.health.remove(level.health[-1])
+            level.player.beenhit = True
+            playerjar.add(level.player)
 
-    if player in playerjar and player.iframes > 0:
-        player.iframes -= 1
-        if player.iframes == 0:
+    if level.player in playerjar and level.player.iframes > 0:
+        level.player.iframes -= 1
+        if level.player.iframes == 0:
             playerjar.empty()
-            player.iframes = 15 
-            player.beenhit = False
-    if player.health == 0:
-        player.kill()
-        weapon.kill()
+            level.player.iframes = 15 
+            level.player.beenhit = False
+    if level.player.health == 0:
+        level.player.kill()
+        level.weapon.kill()
         running = False
     
     # Input reading
     pressed_keys = pygame.key.get_pressed()
     
     # Character location update
-    player.update(pressed_keys, environ, player.beenhit, attacker, width, height)
+    level.player.update(pressed_keys, environ, level.player.beenhit, attacker, width, height)
 
     # Attack handling
     if pressed_keys[K_a] and pressed_keys[K_d]:
         pass
     elif pressed_keys[K_a] and not pressed_keys[K_d]:
-        player.facing = 0
+        level.player.facing = 0
     elif pressed_keys[K_d] and not pressed_keys[K_a]:
-        player.facing = 1
+        level.player.facing = 1
     
-    if player.facing == 1:
-        weapon.surf = weapon.original
-        weapon.rect.left = player.rect.right
-    elif player.facing == 0:
-        if weapon.surf == weapon.original:
-            weapon.surf = pygame.transform.flip(weapon.surf, True, False)
-        weapon.rect.right = player.rect.left
+    if level.player.facing == 1:
+        level.weapon.surf = level.weapon.original
+        level.weapon.rect.left = level.player.rect.right
+    elif level.player.facing == 0:
+        if level.weapon.surf == level.weapon.original:
+            level.weapon.surf = pygame.transform.flip(level.weapon.surf, True, False)
+        level.weapon.rect.right = level.player.rect.left
     
     if pressed_keys[K_k]:
-        if weapon.sheathed and not weapon.attacking:
-            weapons.add(weapon)
-            all_sprites.add(weapon)
-            weapon.hitframes = 10
-            weapon.sheathed = False
-            weapon.attacking = True
-    weapon.rect.centery = player.rect.centery
-    weapon.hitframes -= 1
-    if weapon.hitframes < 0:
-        weapon.hitframes = 0
-        all_sprites.remove(weapon)
-        weapons.remove(weapon)
-        weapon.attacking = False
+        if level.weapon.sheathed and not level.weapon.attacking:
+            weapons.add(level.weapon)
+            all_sprites.add(level.weapon)
+            level.weapon.hitframes = 10
+            level.weapon.sheathed = False
+            level.weapon.attacking = True
+    level.weapon.rect.centery = level.player.rect.centery
+    level.weapon.hitframes -= 1
+    if level.weapon.hitframes < 0:
+        level.weapon.hitframes = 0
+        all_sprites.remove(level.weapon)
+        weapons.remove(level.weapon)
+        level.weapon.attacking = False
         for i in enemies:
             i.beenhit = False
         thejar.empty()
@@ -134,16 +146,16 @@ while running:
     for entity in all_sprites:
         screen.blit(entity.surf, entity.rect)
     visualhp.empty()
-    for i in levelhealth:
+    for i in level.health:
         visualhp.add(i)
     for hp in visualhp:
         screen.blit(hp.surf, hp.rect)
     pygame.display.flip()
 
     # Level advancement conditions
-    if level == 1:
-        if pygame.sprite.collide_rect(player, door) and str(enemies) == "<Group(0 sprites)>":
-            level = 2
+    if lvlnum == 1:
+        if pygame.sprite.collide_rect(level.player, level.door) and str(enemies) == "<Group(0 sprites)>":
+            lvlnum = 2
             advance = True
             all_sprites.empty()
             environ.empty()
