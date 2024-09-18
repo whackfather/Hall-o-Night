@@ -130,7 +130,7 @@ class ContactEnemy(pygame.sprite.Sprite):
         self.boundleft = None
         self.boundright = None
 
-    def update(self, player, obst, beenhit, leftbound, rightbound):
+    def update(self, player, beenhit, leftbound, rightbound):
         if pygame.sprite.collide_circle_ratio(3)(player, self):
             if player.rect.bottom > self.rect.bottom:
                 pass
@@ -160,3 +160,72 @@ class ContactEnemy(pygame.sprite.Sprite):
                 elif self.rect.left < leftbound:
                     self.rect.left = leftbound
                     speedx = 0
+
+class Level():
+    def __init__(self):
+        self.sprites = []
+        self.health = []
+        self.environ = []
+        self.enemies = []
+        self.player = None
+        self.weapon = None
+        self.door = None
+    
+    def load(self, number):
+        self.sprites.clear()
+        self.health.clear()
+        self.environ.clear()
+        self.enemies.clear()
+        
+        info = open(f"txtlevels/level{number}.txt")
+        infolist = info.readlines()
+        info.close()
+
+        hlthind = infolist.index("health\n") + 1
+        hp = int(infolist[hlthind])
+        for i in range(hp):
+            newhp = HealthPoints()
+            newhp.rect.center = (32 * i + 32, 32)
+            self.health.append(newhp)
+        
+        platind = infolist.index("platforms\n") + 1
+        platnum = infolist.index("nomoreplats\n") + 1 - platind
+        for i in range(platnum):
+            if infolist[platind] == "nomoreplats\n":
+                break
+            newplat = EnvObject()
+            newplat.rect.centerx = int(infolist[platind])
+            newplat.rect.centery = int(infolist[platind + 1])
+            self.sprites.append(newplat); self.environ.append(newplat)
+            platind += 2
+
+        doorind = infolist.index("door\n") + 1
+        self.door = AdvanceBox()
+        self.door.rect.centerx = int(infolist[doorind])
+        self.door.rect.centery = int(infolist[doorind + 1])
+        self.sprites.append(self.door)
+
+        enemyind = infolist.index("enemies\n") + 1
+        enemynum = infolist.index("noenemies\n") + 1 - enemyind
+        for i in range(enemynum):
+            if infolist[enemyind] == "noenemies\n":
+                break
+            newenemy = ContactEnemy()
+            newenemy.rect.centerx = int(infolist[enemyind])
+            newenemy.rect.centery = int(infolist[enemyind + 1])
+            newenemy.boundleft = int(infolist[enemyind + 2])
+            newenemy.boundright = int(infolist[enemyind + 3])
+            self.sprites.append(newenemy); self.enemies.append(newenemy)
+            enemyind += 4
+
+        playerind = infolist.index("player\n") + 1
+        self.player = Player()
+        self.player.rect.centerx = int(infolist[playerind])
+        self.player.rect.centery = int(infolist[playerind + 1])
+        self.sprites.append(self.player)
+
+        weaponind = infolist.index("weapon\n") + 1
+        self.weapon = Weapon()
+        self.weapon.rect.centerx = int(infolist[weaponind])
+        self.weapon.rect.centerx = int(infolist[weaponind + 1])
+        self.sprites.append(self.weapon)
