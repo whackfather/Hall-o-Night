@@ -38,6 +38,7 @@ def loader(lvlnum, all_sprites, environ, enemies):
         enemies.add(i)
 advance = True
 
+# Game loop
 running = True
 while running:
     # Level check
