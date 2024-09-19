@@ -19,70 +19,6 @@ class Player(pygame.sprite.Sprite):
         self.beenhit = False
         self.facing = 1
 
-    def update(self, pressed_keys, environ, beenhit, attacker, width, height):
-        def objectcollide():
-            if pygame.sprite.spritecollideany(self, environ):
-                obstacle = pygame.sprite.spritecollideany(self, environ)
-                if self.rect.top < obstacle.rect.bottom and self.rect.bottom > obstacle.rect.bottom:
-                    self.rect.top = obstacle.rect.bottom
-                    self.speedy = 0
-                elif self.rect.bottom > obstacle.rect.top and self.rect.top < obstacle.rect.bottom:
-                    self.rect.bottom = obstacle.rect.top
-                    self.speedy = 0
-                    self.grounded = True
-            if self.rect.top < 0:
-                self.rect.top = 0
-                self.speedy = 0
-            if self.rect.bottom > height:
-                self.rect.bottom = height
-                self.speedy = 0
-                self.grounded = True
-            if self.rect.right > width:
-                self.rect.right = width
-            if self.rect.left < 0:
-                self.rect.left = 0
-        
-        if beenhit:
-            self.speedy += 1
-            if self.speedy > 21:
-                self.speedy = 21
-            if self.rect.right < attacker.rect.centerx:
-                self.rect.move_ip(-6, self.speedy)
-            elif self.rect.left > attacker.rect.centerx:
-                self.rect.move_ip(6, self.speedy)
-            objectcollide()
-        else:
-            if pressed_keys[K_a]:
-                if self.jump:
-                    self.speedx = -6
-                else:
-                    self.speedx = -5
-                self.rect.move_ip(self.speedx, 0)
-                if pygame.sprite.spritecollideany(self, environ):
-                    obstacle = pygame.sprite.spritecollideany(self, environ)
-                    self.rect.left = obstacle.rect.right
-                self.speedx = 0
-            if pressed_keys[K_d]:
-                if self.jump:
-                    self.speedx = 6
-                else:
-                    self.speedx = 5
-                self.rect.move_ip(self.speedx, 0)
-                if pygame.sprite.spritecollideany(self, environ):
-                    obstacle = pygame.sprite.spritecollideany(self, environ)
-                    self.rect.right = obstacle.rect.left
-                self.speedx = 0
-            if pressed_keys[K_SPACE]:
-                if self.jump == False and self.grounded == True and self.speedy == 0:
-                    self.jump = True
-                    self.grounded = False
-                    self.speedy = -17
-            self.rect.move_ip(0, self.speedy)
-            self.speedy += 1
-            if self.speedy > 21:
-                self.speedy = 21
-            objectcollide()
-
 # HP sprites
 class HealthPoints(pygame.sprite.Sprite):
     def __init__(self):
@@ -212,9 +148,7 @@ class Level():
         self.player = Player()
         self.player.rect.centerx = int(data["player"]["centerx"])
         self.player.rect.centery = int(data["player"]["centery"])
-        self.sprites.append(self.player)
 
         self.weapon = Weapon()
         self.weapon.rect.centerx = int(data["weapon"]["centerx"])
         self.weapon.rect.centerx = int(data["weapon"]["centery"])
-        self.sprites.append(self.weapon)
