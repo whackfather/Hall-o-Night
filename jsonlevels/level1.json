@@ -15,12 +15,12 @@
         {"centerx":1138, "centery":287},
         {"centerx":845, "centery":324}
     ],
-    "door":{"centerx":1091, "centery":243},
     "enemies":[
         {"centerx":640, "centery":586, "leftbound":499, "rightbound":781},
         {"centerx":47, "centery":451, "leftbound":0, "rightbound":376},
         {"centerx":646, "centery":316, "leftbound":411, "rightbound":693}
     ],
+    "door":{"centerx":1091, "centery":243},
     "player":{"centerx":80, "centery":688},
     "weapon":{"centerx":128, "centery":688}
 }
