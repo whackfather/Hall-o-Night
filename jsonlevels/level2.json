@@ -1,3 +1,12 @@
 {
-  "currently":"nothing"
+    "health":5,
+    "platforms":[
+        {"centerx":47, "centery":600},
+        {"centerx":141, "centery":490},
+        {"centerx":235, "centery":490}
+    ],
+    "enemies":0,
+    "door":{"centerx":2000, "centery":2000},
+    "player":{"centerx":80, "centery":688},
+    "weapon":{"centerx":128, "centery":688}
 }
