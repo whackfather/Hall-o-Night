@@ -1,4 +1,4 @@
-# All game classes
+# All Game Classes
 
 import pygame
 from pygame.locals import *
@@ -90,6 +90,7 @@ class HealthPoints(pygame.sprite.Sprite):
         self.surf = pygame.image.load("sprites/healthpoint.png").convert()
         self.rect = self.surf.get_rect()
 
+# Level advance box
 class AdvanceBox(pygame.sprite.Sprite):
     def __init__(self):
         super(AdvanceBox, self).__init__()
@@ -162,6 +163,7 @@ class ContactEnemy(pygame.sprite.Sprite):
                     self.rect.left = leftbound
                     speedx = 0
 
+# Loading the level data from .json
 class Level():
     def __init__(self):
         self.sprites = []
@@ -192,14 +194,15 @@ class Level():
             newplat.rect.centerx = int(plat["centerx"])
             newplat.rect.centery = int(plat["centery"])
             self.sprites.append(newplat); self.environ.append(newplat)
-
-        for enemy in data["enemies"]:
-            newenemy = ContactEnemy()
-            newenemy.rect.centerx = int(enemy["centerx"])
-            newenemy.rect.centery = int(enemy["centery"])
-            newenemy.boundleft = int(enemy["leftbound"])
-            newenemy.boundright = int(enemy["rightbound"])
-            self.sprites.append(newenemy); self.enemies.append(newenemy)
+        
+        if data["enemies"] != 0:
+            for enemy in data["enemies"]:
+                newenemy = ContactEnemy()
+                newenemy.rect.centerx = int(enemy["centerx"])
+                newenemy.rect.centery = int(enemy["centery"])
+                newenemy.boundleft = int(enemy["leftbound"])
+                newenemy.boundright = int(enemy["rightbound"])
+                self.sprites.append(newenemy); self.enemies.append(newenemy)
 
         self.door = AdvanceBox()
         self.door.rect.centerx = int(data["door"]["centerx"])
