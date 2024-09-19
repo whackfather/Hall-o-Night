@@ -21,6 +21,6 @@
         {"centerx":646, "centery":316, "leftbound":411, "rightbound":693}
     ],
     "door":{"centerx":1091, "centery":243},
-    "player":{"centerx":80, "centery":688},
-    "weapon":{"centerx":128, "centery":688}
+    "player":{"centerx":640, "centery":688},
+    "weapon":{"centerx":688, "centery":688}
 }
