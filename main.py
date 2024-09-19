@@ -131,17 +131,17 @@ while running:
         if level.player.rect.right < attacker.rect.centerx:
             level.player.rect.move_ip(0, level.player.speedy)
             for any in all_sprites:
-                any.rect.move_ip(-6, 0)
-            for enemy in enemies:
-                enemy.boundleft -= 6
-                enemy.boundright -= 6
-        elif level.player.rect.left > attacker.rect.centerx:
-            level.player.rect.move_ip(0, level.player.speedy)
-            for any in all_sprites:
                 any.rect.move_ip(6, 0)
             for enemy in enemies:
                 enemy.boundleft += 6
                 enemy.boundright += 6
+        elif level.player.rect.left > attacker.rect.centerx:
+            level.player.rect.move_ip(0, level.player.speedy)
+            for any in all_sprites:
+                any.rect.move_ip(-6, 0)
+            for enemy in enemies:
+                enemy.boundleft -= 6
+                enemy.boundright -= 6
         objectcollide()
     else:
         if pressed_keys[K_a]:
@@ -233,6 +233,9 @@ while running:
             i.beenhit = False
         thejar.empty()
 
+    if level.player.rect.centerx != width / 2:
+        level.player.rect.centerx = width / 2
+    
     # Display sprites on screen
     screen.fill((30, 30, 30))
     for entity in all_sprites:
