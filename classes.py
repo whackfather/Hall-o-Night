@@ -8,7 +8,7 @@ import json
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
-        self.surf = pygame.image.load("sprites/32x64.png").convert()
+        self.surf = pygame.image.load("sprites/hunter.png").convert()
         self.rect = self.surf.get_rect()
         self.jump = False
         self.grounded = True
@@ -59,7 +59,7 @@ class EnvObject(pygame.sprite.Sprite):
 class ContactEnemy(pygame.sprite.Sprite):
     def __init__(self):
         super(ContactEnemy, self).__init__()
-        self.surf = pygame.image.load("sprites/enemy1.png").convert()
+        self.surf = pygame.image.load("sprites/diddy.png").convert()
         self.rect = self.surf.get_rect()
         self.spdx = 0
         self.health = 3
