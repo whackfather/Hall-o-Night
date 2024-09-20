@@ -219,19 +219,21 @@ while running:
         if level.weapon.sheathed and not level.weapon.attacking:
             weapons.add(level.weapon)
             all_sprites.add(level.weapon)
-            level.weapon.hitframes = 10
+            level.weapon.hitframes = 20
             level.weapon.sheathed = False
             level.weapon.attacking = True
     level.weapon.rect.centery = level.player.rect.centery
     level.weapon.hitframes -= 1
     if level.weapon.hitframes < 0:
         level.weapon.hitframes = 0
+        level.weapon.attacking = False
+    elif level.weapon.hitframes <= 7:
         all_sprites.remove(level.weapon)
         weapons.remove(level.weapon)
-        level.weapon.attacking = False
+        thejar.empty()
+    elif level.weapon.hitframes <= 10:
         for i in enemies:
             i.beenhit = False
-        thejar.empty()
 
     if level.player.rect.centerx != width / 2:
         level.player.rect.centerx = width / 2
