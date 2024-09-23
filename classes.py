@@ -9,6 +9,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
         self.surf = pygame.image.load("sprites/hunter.png").convert()
+        self.original = self.surf
         self.rect = self.surf.get_rect()
         self.jump = False
         self.grounded = True
@@ -48,10 +49,17 @@ class Weapon(pygame.sprite.Sprite):
         self.attacking = False
 
 # Basic long platform
-class EnvObject(pygame.sprite.Sprite):
+class EnvFloor(pygame.sprite.Sprite):
     def __init__(self):
-        super(EnvObject, self).__init__()
+        super(EnvFloor, self).__init__()
         self.surf = pygame.image.load("sprites/platform.png").convert()
+        self.rect = self.surf.get_rect()
+
+# Wall (idk what else to tell you)
+class EnvWall(pygame.sprite.Sprite):
+    def __init__(self):
+        super(EnvWall, self).__init__()
+        self.surf = pygame.image.load("sprites/wall.png").convert()
         self.rect = self.surf.get_rect()
 
 # Basic enemy
@@ -69,8 +77,15 @@ class ContactEnemy(pygame.sprite.Sprite):
         self.boundright = None
 
     def update(self, player, beenhit, leftbound, rightbound):
+        def stayonplat():
+            if self.rect.right > rightbound:
+                self.rect.right = rightbound
+                self.spdx = 0
+            elif self.rect.left < leftbound:
+                self.rect.left = leftbound
+                self.spdx = 0
         if pygame.sprite.collide_circle_ratio(3)(player, self):
-            if player.rect.bottom > self.rect.bottom:
+            if player.rect.bottom > (self.rect.bottom + 20) or player.rect.bottom < (self.rect.top - 50):
                 pass
             elif beenhit:
                 knockback = 4
@@ -78,26 +93,16 @@ class ContactEnemy(pygame.sprite.Sprite):
                     self.rect.move_ip(knockback, 0)
                 elif player.rect.left > self.rect.right:
                     self.rect.move_ip(-knockback, 0)
-                if self.rect.right > rightbound:
-                    self.rect.right = rightbound
-                    speedx = 0
-                elif self.rect.left < leftbound:
-                    self.rect.left = leftbound
-                    speedx = 0
+                stayonplat()
             else:
                 if player.rect.centerx < self.rect.left:
-                    speedx = -2
+                    self.spdx = -2
                 elif player.rect.centerx > self.rect.right:
-                    speedx = 2
+                    self.spdx = 2
                 else:
-                    speedx = 0
-                self.rect.move_ip(speedx, 0)
-                if self.rect.right > rightbound:
-                    self.rect.right = rightbound
-                    speedx = 0
-                elif self.rect.left < leftbound:
-                    self.rect.left = leftbound
-                    speedx = 0
+                    self.spdx = 0
+                self.rect.move_ip(self.spdx, 0)
+                stayonplat()
 
 # Loading the level data from .json
 class Level():
@@ -125,11 +130,19 @@ class Level():
             newhp.rect.center = (32 * i + 32, 32)
             self.health.append(newhp)
         
-        for plat in data["platforms"]:
-            newplat = EnvObject()
-            newplat.rect.centerx = int(plat["centerx"])
-            newplat.rect.centery = int(plat["centery"])
-            self.sprites.append(newplat); self.environ.append(newplat)
+        if data["platforms"] != 0:
+            for plat in data["platforms"]:
+                newplat = EnvFloor()
+                newplat.rect.centerx = int(plat["centerx"])
+                newplat.rect.centery = int(plat["centery"])
+                self.sprites.append(newplat); self.environ.append(newplat)
+        
+        if data["walls"] != 0:
+            for wall in data["walls"]:
+                newwall = EnvWall()
+                newwall.rect.centerx = int(wall["centerx"])
+                newwall.rect.centery = int(wall["centery"])
+                self.sprites.append(newwall); self.environ.append(newwall)
         
         if data["enemies"] != 0:
             for enemy in data["enemies"]:
@@ -139,7 +152,7 @@ class Level():
                 newenemy.boundleft = int(enemy["leftbound"])
                 newenemy.boundright = int(enemy["rightbound"])
                 self.sprites.append(newenemy); self.enemies.append(newenemy)
-
+        
         self.door = AdvanceBox()
         self.door.rect.centerx = int(data["door"]["centerx"])
         self.door.rect.centery = int(data["door"]["centery"])
