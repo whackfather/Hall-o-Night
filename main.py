@@ -63,12 +63,8 @@ while running:
                 level.weapon.sheathed = True
     
     # Enemy location update
-    if lvlnum == 1:
-        for enemy in level.enemies:
-            enemy.update(level.player, enemy.beenhit, enemy.boundleft, enemy.boundright)
-    elif lvlnum == 2:
-        for enemy in level.enemies:
-            enemy.update(level.player, enemy.beenhit, enemy.boundleft, enemy.boundright)
+    for enemy in level.enemies:
+        enemy.update(level.player, enemy.beenhit, enemy.boundleft, enemy.boundright)
     
     # Player, weapon, and enemy collision
     if pygame.sprite.groupcollide(weapons, enemies, False, False):
@@ -86,6 +82,7 @@ while running:
             level.health.remove(level.health[-1])
             level.player.beenhit = True
             playerjar.add(level.player)
+            sleep(0.15)
 
     if level.player in playerjar and level.player.iframes > 0:
         level.player.iframes -= 1
@@ -105,7 +102,7 @@ while running:
     def objectcollide():
             if pygame.sprite.spritecollideany(level.player, environ):
                 obstacle = pygame.sprite.spritecollideany(level.player, environ)
-                if level.player.rect.top < obstacle.rect.bottom and level.player.rect.bottom > obstacle.rect.bottom:
+                if level.player.rect.top < obstacle.rect.bottom < level.player.rect.bottom:
                     level.player.rect.top = obstacle.rect.bottom
                     level.player.speedy = 0
                 elif level.player.rect.bottom > obstacle.rect.top and level.player.rect.top < obstacle.rect.bottom:
@@ -125,10 +122,12 @@ while running:
                 level.player.rect.left = 0
         
     if level.player.beenhit:
+        if level.player.iframes == 14:
+            level.player.speedy = -10
         level.player.speedy += 1
         if level.player.speedy > 21:
             level.player.speedy = 21
-        if level.player.rect.right < attacker.rect.centerx:
+        if level.player.rect.right <= attacker.rect.centerx:
             level.player.rect.move_ip(0, level.player.speedy)
             for any in all_sprites:
                 any.rect.move_ip(6, 0)
@@ -146,15 +145,15 @@ while running:
     else:
         if pressed_keys[K_a]:
             if level.player.jump:
-                level.player.speedx = 6
+                level.player.speedx = 10
                 for enemy in enemies:
-                    enemy.boundleft += 6
-                    enemy.boundright += 6
+                    enemy.boundleft += level.player.speedx
+                    enemy.boundright += level.player.speedx
             else:
-                level.player.speedx = 5
+                level.player.speedx = 8
                 for enemy in enemies:
-                    enemy.boundleft += 5
-                    enemy.boundright += 5
+                    enemy.boundleft += level.player.speedx
+                    enemy.boundright += level.player.speedx
             for any in all_sprites:
                 any.rect.move_ip(level.player.speedx, 0)
             if pygame.sprite.spritecollideany(level.player, environ):
@@ -168,15 +167,15 @@ while running:
             level.player.speedx = 0
         if pressed_keys[K_d]:
             if level.player.jump:
-                level.player.speedx = -6
+                level.player.speedx = -10
                 for enemy in enemies:
-                    enemy.boundleft -= 6
-                    enemy.boundright -= 6
+                    enemy.boundleft += level.player.speedx
+                    enemy.boundright += level.player.speedx
             else:
-                level.player.speedx = -5
+                level.player.speedx = -8
                 for enemy in enemies:
-                    enemy.boundleft -= 5
-                    enemy.boundright -= 5
+                    enemy.boundleft += level.player.speedx
+                    enemy.boundright += level.player.speedx
             for any in all_sprites:
                 any.rect.move_ip(level.player.speedx, 0)
             if pygame.sprite.spritecollideany(level.player, environ):
@@ -192,7 +191,7 @@ while running:
             if level.player.jump == False and level.player.grounded == True and level.player.speedy == 0:
                 level.player.jump = True
                 level.player.grounded = False
-                level.player.speedy = -17
+                level.player.speedy = -15
         level.player.rect.move_ip(0, level.player.speedy)
         level.player.speedy += 1
         if level.player.speedy > 21:
@@ -260,6 +259,6 @@ while running:
             environ.empty()
             enemies.empty()
     
-    clock.tick(60)
+    clock.tick(30)
 
 pygame.quit()
