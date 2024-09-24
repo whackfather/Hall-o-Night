@@ -8,7 +8,7 @@ import json
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
-        self.surf = pygame.image.load("sprites/hunter.png").convert()
+        self.surf = pygame.image.load("sprites/testing.png").convert()
         self.original = self.surf
         self.rect = self.surf.get_rect()
         self.jump = False
@@ -52,7 +52,7 @@ class Weapon(pygame.sprite.Sprite):
 class EnvFloor(pygame.sprite.Sprite):
     def __init__(self):
         super(EnvFloor, self).__init__()
-        self.surf = pygame.image.load("sprites/platform.png").convert()
+        self.surf = pygame.image.load("sprites/newground.png").convert()
         self.rect = self.surf.get_rect()
 
 # Wall (idk what else to tell you)
@@ -60,6 +60,12 @@ class EnvWall(pygame.sprite.Sprite):
     def __init__(self):
         super(EnvWall, self).__init__()
         self.surf = pygame.image.load("sprites/wall.png").convert()
+        self.rect = self.surf.get_rect()
+
+class EnvPlatform(pygame.sprite.Sprite):
+    def __init__(self):
+        super(EnvPlatform, self).__init__()
+        self.surf = pygame.image.load("sprites/platform.png").convert()
         self.rect = self.surf.get_rect()
 
 # Basic enemy
@@ -130,12 +136,12 @@ class Level():
             newhp.rect.center = (32 * i + 32, 32)
             self.health.append(newhp)
         
-        if data["platforms"] != 0:
-            for plat in data["platforms"]:
-                newplat = EnvFloor()
-                newplat.rect.centerx = int(plat["centerx"])
-                newplat.rect.centery = int(plat["centery"])
-                self.sprites.append(newplat); self.environ.append(newplat)
+        if data["ground"] != 0:
+            for ground in data["ground"]:
+                newground = EnvFloor()
+                newground.rect.centerx = int(ground["centerx"])
+                newground.rect.centery = int(ground["centery"])
+                self.sprites.append(newground); self.environ.append(newground)
         
         if data["walls"] != 0:
             for wall in data["walls"]:
@@ -143,6 +149,13 @@ class Level():
                 newwall.rect.centerx = int(wall["centerx"])
                 newwall.rect.centery = int(wall["centery"])
                 self.sprites.append(newwall); self.environ.append(newwall)
+
+        if data["platforms"] != 0:
+            for plat in data["platforms"]:
+                newplat = EnvPlatform()
+                newplat.rect.centerx = int(plat["centerx"])
+                newplat.rect.centery = int(plat["centery"])
+                self.sprites.append(newplat); self.environ.append(newplat)
         
         if data["enemies"] != 0:
             for enemy in data["enemies"]:
