@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.iframes = 15
         self.beenhit = False
         self.facing = 1
+        self.touching = False
 
 # HP sprites
 class HealthPoints(pygame.sprite.Sprite):
@@ -48,7 +49,7 @@ class Weapon(pygame.sprite.Sprite):
         self.hitframes = 0
         self.attacking = False
 
-# Basic long platform
+# Basic dirt floor
 class EnvFloor(pygame.sprite.Sprite):
     def __init__(self):
         super(EnvFloor, self).__init__()
@@ -62,17 +63,17 @@ class EnvWall(pygame.sprite.Sprite):
         self.surf = pygame.image.load("sprites/wall.png").convert()
         self.rect = self.surf.get_rect()
 
+# Floating brick platforms (not ground)
 class EnvPlatform(pygame.sprite.Sprite):
     def __init__(self):
         super(EnvPlatform, self).__init__()
         self.surf = pygame.image.load("sprites/platform.png").convert()
         self.rect = self.surf.get_rect()
 
-# Basic enemy
-# Remains on platform it starts on, deals damage by bodyslamming
-class ContactEnemy(pygame.sprite.Sprite):
+# Brute, remains on platform it starts on, deals damage by bodyslamming
+class BruteEnemy(pygame.sprite.Sprite):
     def __init__(self):
-        super(ContactEnemy, self).__init__()
+        super(BruteEnemy, self).__init__()
         self.surf = pygame.image.load("sprites/diddy.png").convert()
         self.rect = self.surf.get_rect()
         self.spdx = 0
@@ -159,7 +160,7 @@ class Level():
         
         if data["enemies"] != 0:
             for enemy in data["enemies"]:
-                newenemy = ContactEnemy()
+                newenemy = BruteEnemy()
                 newenemy.rect.centerx = int(enemy["centerx"])
                 newenemy.rect.centery = int(enemy["centery"])
                 newenemy.boundleft = int(enemy["leftbound"])
