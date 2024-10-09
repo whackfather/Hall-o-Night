@@ -25,6 +25,7 @@ playerjar = pygame.sprite.Group()
 clock = pygame.time.Clock()
 
 # Stuff that needed defining 
+touching = False
 attacker = None
 lvlnum = 1
 level = Level()
@@ -99,43 +100,37 @@ while running:
     pressed_keys = pygame.key.get_pressed()
     
     # Character location update
-    def objectcollide():
-            if pygame.sprite.spritecollideany(level.player, environ):
-                obstacle = pygame.sprite.spritecollideany(level.player, environ)
-                if level.player.rect.top < obstacle.rect.bottom < level.player.rect.bottom:
-                    level.player.rect.top = obstacle.rect.bottom
-                    level.player.speedy = 0
-                elif level.player.rect.bottom > obstacle.rect.top and level.player.rect.top < obstacle.rect.bottom:
-                    level.player.rect.bottom = obstacle.rect.top
-                    level.player.speedy = 0
-                    level.player.grounded = True
-            if level.player.rect.top < 0:
-                level.player.rect.top = 0
+    def objectcollide(direction):
+        if pygame.sprite.spritecollideany(level.player, environ):
+            obstacle = pygame.sprite.spritecollideany(level.player, environ)
+            if direction == "a":
+                level.player.rect.left = obstacle.rect.right
+            elif direction == "d":
+                level.player.rect.right = obstacle.rect.left
+            if level.player.rect.top < obstacle.rect.bottom < level.player.rect.bottom:
+                level.player.rect.top = obstacle.rect.bottom
                 level.player.speedy = 0
-            if level.player.rect.bottom > height:
-                level.player.rect.bottom = height
+            elif level.player.rect.bottom > obstacle.rect.top and level.player.rect.top < obstacle.rect.bottom:
+                level.player.rect.bottom = obstacle.rect.top
                 level.player.speedy = 0
                 level.player.grounded = True
-            if level.player.rect.right > width:
-                level.player.rect.right = width
-            if level.player.rect.left < 0:
-                level.player.rect.left = 0
+            level.player.speedx = 0
+        if level.player.rect.top < 0:
+            level.player.rect.top = 0
+            level.player.speedy = 0
+        if level.player.rect.bottom > height:
+            level.player.rect.bottom = height
+            level.player.speedy = 0
+            level.player.grounded = True
+        if level.player.rect.right > width:
+            level.player.rect.right = width
+        if level.player.rect.left < 0:
+            level.player.rect.left = 0
 
     def enemyBoundMove(amount: int):
         for enemy in enemies:
             enemy.boundleft += amount
             enemy.boundright += amount
-
-    def collideSide(direction):
-        if pygame.sprite.spritecollideany(level.player, environ):
-            obstacle = pygame.sprite.spritecollideany(level.player, environ)
-            for any in all_sprites:
-                any.rect.move_ip(-level.player.speedx, 0)
-            if direction == "a":
-                level.player.rect.left = obstacle.rect.right
-            elif direction == "d":
-                level.player.rect.right = obstacle.rect.left
-            enemyBoundMove(-level.player.speedx)
         
     if level.player.beenhit:
         if level.player.iframes == 14:
@@ -158,24 +153,28 @@ while running:
         if pressed_keys[K_a]:
             if level.player.jump:
                 level.player.speedx = 10
+                objectcollide("a")
                 enemyBoundMove(level.player.speedx)
             else:
                 level.player.speedx = 8
+                objectcollide("a")
                 enemyBoundMove(level.player.speedx)
             for any in all_sprites:
+                objectcollide("a")
                 any.rect.move_ip(level.player.speedx, 0)
-            collideSide("a")
             level.player.speedx = 0
         if pressed_keys[K_d]:
             if level.player.jump:
                 level.player.speedx = -10
+                objectcollide("d")
                 enemyBoundMove(level.player.speedx)
             else:
                 level.player.speedx = -8
+                objectcollide("d")
                 enemyBoundMove(level.player.speedx)
             for any in all_sprites:
+                objectcollide("d")
                 any.rect.move_ip(level.player.speedx, 0)
-            collideSide("d")
             level.player.speedx = 0
         if pressed_keys[K_SPACE]:
             if level.player.jump == False and level.player.grounded == True and level.player.speedy == 0:
@@ -186,7 +185,7 @@ while running:
         level.player.speedy += 2
         if level.player.speedy > 21:
             level.player.speedy = 21
-        objectcollide()
+        objectcollide(None)
 
     # Attack handling
     if pressed_keys[K_a] and pressed_keys[K_d]:
