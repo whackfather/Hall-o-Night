@@ -32,7 +32,9 @@
         {"centerx":12, "centery":45},
         {"centerx":750, "centery":609},
         {"centerx":750, "centery":515},
-        {"centerx":650, "centery":396}
+        {"centerx":650, "centery":396},
+        {"centerx":650, "centery":302},
+        {"centerx":374, "centery":296}
     ],
     "platforms":[
         {"centerx":809, "centery":564},
@@ -42,9 +44,15 @@
         {"centerx":434, "centery":455},
         {"centerx":340, "centery":455},
         {"centerx":72, "centery":564},
-        {"centerx":94, "centery":564}
+        {"centerx":94, "centery":564},
+        {"centerx":434, "centery":330}
     ],
-    "enemies":0,
+    "shortplats":[
+        {"centerx":691, "centery":350}
+    ],
+    "enemies":[
+        {"centerx":100, "centery":527, "leftbound":25, "rightbound":141}
+    ],
     "door":{"centerx":1091, "centery":-2000},
     "player":{"centerx":640, "centery":530},
     "weapon":{"centerx":688, "centery":620}
