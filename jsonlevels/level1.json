@@ -14,14 +14,38 @@
         {"centerx":672, "centery":688},
         {"centerx":736, "centery":688},
         {"centerx":800, "centery":688},
-        {"centerx":864, "centery":688}
+        {"centerx":864, "centery":688},
+        {"centerx":928, "centery":688},
+        {"centerx":992, "centery":688},
+        {"centerx":1056, "centery":688},
+        {"centerx":1120, "centery":688},
+        {"centerx":1184, "centery":688},
+        {"centerx":1248, "centery":688}
     ],
-    "walls":0,
+    "walls":[
+        {"centerx":12, "centery":609},
+        {"centerx":12, "centery":515},
+        {"centerx":12, "centery":421},
+        {"centerx":12, "centery":327},
+        {"centerx":12, "centery":233},
+        {"centerx":12, "centery":139},
+        {"centerx":12, "centery":45},
+        {"centerx":750, "centery":609},
+        {"centerx":750, "centery":515},
+        {"centerx":650, "centery":396}
+    ],
     "platforms":[
-        {"centerx":400, "centery":562}
+        {"centerx":809, "centery":564},
+        {"centerx":716, "centery":455},
+        {"centerx":622, "centery":455},
+        {"centerx":528, "centery":455},
+        {"centerx":434, "centery":455},
+        {"centerx":340, "centery":455},
+        {"centerx":72, "centery":564},
+        {"centerx":94, "centery":564}
     ],
     "enemies":0,
     "door":{"centerx":1091, "centery":-2000},
-    "player":{"centerx":640, "centery":683},
-    "weapon":{"centerx":688, "centery":683}
+    "player":{"centerx":640, "centery":530},
+    "weapon":{"centerx":688, "centery":620}
 }
