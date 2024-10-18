@@ -8,7 +8,7 @@ import json
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
-        self.surf = pygame.image.load("sprites/testing.png").convert()
+        self.surf = pygame.image.load("sprites/smallerq.png").convert()
         self.original = self.surf
         self.rect = self.surf.get_rect()
         self.jump = False
@@ -69,6 +69,13 @@ class EnvPlatform(pygame.sprite.Sprite):
         self.surf = pygame.image.load("sprites/platform.png").convert()
         self.rect = self.surf.get_rect()
 
+# Shorter version of platform
+class EnvShortPlat(pygame.sprite.Sprite):
+    def __init__(self):
+        super(EnvShortPlat, self).__init__()
+        self.surf = pygame.image.load("sprites/shortplat.png").convert()
+        self.rect = self.surf.get_rect()
+
 # Brute, remains on platform it starts on, deals damage by bodyslamming
 class BruteEnemy(pygame.sprite.Sprite):
     def __init__(self):
@@ -82,8 +89,8 @@ class BruteEnemy(pygame.sprite.Sprite):
         self.boundleft = None
         self.boundright = None
 
-    def update(self, player, beenhit, leftbound, rightbound):
-        def stayonplat():
+    def update(self, player:pygame.Rect, beenhit:bool, leftbound:int, rightbound:int) -> None:
+        def stayonplat() -> None:
             if self.rect.right > rightbound:
                 self.rect.right = rightbound
                 self.spdx = 0
@@ -121,7 +128,7 @@ class Level():
         self.weapon = None
         self.door = None
     
-    def load(self, number):
+    def load(self, number:int) -> None:
         self.sprites.clear()
         self.health.clear()
         self.environ.clear()
@@ -156,6 +163,13 @@ class Level():
                 newplat.rect.centerx = int(plat["centerx"])
                 newplat.rect.centery = int(plat["centery"])
                 self.sprites.append(newplat); self.environ.append(newplat)
+        
+        if data["shortplats"] != 0:
+            for short in data["shortplats"]:
+                newshort = EnvShortPlat()
+                newshort.rect.centerx = int(short["centerx"])
+                newshort.rect.centery = int(short["centery"])
+                self.sprites.append(newshort); self.environ.append(newshort)
         
         if data["enemies"] != 0:
             for enemy in data["enemies"]:
