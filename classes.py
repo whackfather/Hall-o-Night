@@ -6,7 +6,7 @@ import json
 
 # The Player
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(Player, self).__init__()
         self.surf = pygame.image.load("sprites/smallerq.png").convert()
         self.original = self.surf
@@ -22,14 +22,14 @@ class Player(pygame.sprite.Sprite):
 
 # HP sprites
 class HealthPoints(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(HealthPoints, self).__init__()
         self.surf = pygame.image.load("sprites/healthpoint.png").convert()
         self.rect = self.surf.get_rect()
 
 # Level advance box
 class AdvanceBox(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(AdvanceBox, self).__init__()
         self.surf = pygame.image.load("sprites/advance.png").convert()
         self.rect = self.surf.get_rect()
@@ -38,7 +38,7 @@ class AdvanceBox(pygame.sprite.Sprite):
 
 # Player Weapon
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(Weapon, self).__init__()
         self.surf = pygame.image.load("sprites/weaponright.png").convert()
         self.surf.set_colorkey((0, 0, 0))
@@ -50,35 +50,35 @@ class Weapon(pygame.sprite.Sprite):
 
 # Basic dirt floor
 class EnvFloor(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(EnvFloor, self).__init__()
         self.surf = pygame.image.load("sprites/newground.png").convert()
         self.rect = self.surf.get_rect()
 
 # Wall (idk what else to tell you)
 class EnvWall(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(EnvWall, self).__init__()
         self.surf = pygame.image.load("sprites/wall.png").convert()
         self.rect = self.surf.get_rect()
 
 # Floating brick platforms (not ground)
 class EnvPlatform(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(EnvPlatform, self).__init__()
         self.surf = pygame.image.load("sprites/platform.png").convert()
         self.rect = self.surf.get_rect()
 
 # Shorter version of platform
 class EnvShortPlat(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(EnvShortPlat, self).__init__()
         self.surf = pygame.image.load("sprites/shortplat.png").convert()
         self.rect = self.surf.get_rect()
 
 # Brute, remains on platform it starts on, deals damage by bodyslamming
 class BruteEnemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self) -> None:
         super(BruteEnemy, self).__init__()
         self.surf = pygame.image.load("sprites/diddy.png").convert()
         self.rect = self.surf.get_rect()
@@ -119,7 +119,7 @@ class BruteEnemy(pygame.sprite.Sprite):
 
 # Loading the level data from .json
 class Level():
-    def __init__(self):
+    def __init__(self) -> None:
         self.sprites = []
         self.health = []
         self.environ = []
