@@ -20,7 +20,12 @@
         {"centerx":1056, "centery":688},
         {"centerx":1120, "centery":688},
         {"centerx":1184, "centery":688},
-        {"centerx":1248, "centery":688}
+        {"centerx":1248, "centery":688},
+        {"centerx":1312, "centery":688},
+        {"centerx":1376, "centery":688},
+        {"centerx":1440, "centery":688},
+        {"centerx":1504, "centery":688},
+        {"centerx":1568, "centery":688}
     ],
     "walls":[
         {"centerx":12, "centery":609},
